@@ -1,0 +1,9 @@
+.wrapper {
+  margin: 0 auto;
+  padding: 0 0.75rem;
+  max-width: 90rem;
+}
+
+button {
+  cursor: pointer;
+}

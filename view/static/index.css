@@ -1,0 +1,113 @@
+.floor {
+  padding: 0.75rem 0 0;
+}
+
+.first-buttons {
+  display: flex;
+}
+
+button.back, button.new-game, button.join-game {
+  padding: 1.25rem 0.75rem;
+  color: #FFF;
+  border-radius: 0.125rem;
+  white-space: nowrap;
+}
+
+button.back {
+  margin-right: 0.75rem;
+}
+
+button.new-game, button.join-game {
+  width: 100%;
+}
+
+.first-buttons button {
+  margin-right: 0.75rem;
+}
+
+.first-buttons button:last-of-type {
+  margin-right: 0;
+}
+
+button.back {
+  background-color: #616161;
+}
+
+button.back:hover {
+  background-color: #9e9e9e;
+}
+
+button.new-game {
+  background-color: #512da8;
+}
+
+button.new-game:hover {
+  background-color: #673ab7;
+}
+
+button.join-game {
+  background-color: #388e3c;
+}
+
+button.join-game:hover {
+  background-color: #4caf50;
+}
+
+.game-form form {
+  width: 100%;
+}
+
+.game-form form>div {
+  max-width: 45rem;
+  margin: 0 auto 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.game-form form>div:last-of-type {
+  margin: 0 auto;
+}
+
+.game-form label {
+  white-space: nowrap;
+}
+
+.game-form input {
+  margin: 0 0.75rem;
+}
+
+#new-game-form {
+  width: 100%;
+}
+
+.game-form input {
+  width: 100%;
+  padding: 0.25rem;
+  border-radius: 0.125rem;
+  text-align: right;
+  border: 1px solid #0002;
+}
+
+.new-game-submit {
+  width: 100%;
+  padding: 1.25rem 0.75rem;
+  color: #FFF;
+  background-color: #512da8;
+  border-radius: 0.125rem;
+}
+
+.new-game-submit:hover {
+  background-color: #673ab7;
+}
+
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 14px;
+  }
+  .first-buttons {
+    display: block;
+  }
+  .first-buttons .new-game {
+    margin-bottom: 0.75rem;
+  }
+}
