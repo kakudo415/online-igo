@@ -100,6 +100,18 @@ button.join-game:hover {
   background-color: #673ab7;
 }
 
+.join-game-submit {
+  width: 100%;
+  padding: 1.25rem 0.75rem;
+  color: #FFF;
+  background-color: #388e3c;
+  border-radius: 0.125rem;
+}
+
+.join-game-submit:hover {
+  background-color: #4caf50;
+}
+
 @media screen and (max-width: 600px) {
   html {
     font-size: 14px;

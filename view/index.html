@@ -11,11 +11,11 @@
       <h1><a href="/">Online 囲碁</a></h1>
     </div>
     <div class="floor first-buttons">
-      <button class="new-game" onclick="openNewGameForm();">新たな対局を作成</button>
-      <button class="join-game" onclick="openJoinGameForm();">対局に参加</button>
+      <button type="button" class="new-game" onclick="openNewGameForm();">新たな対局を作成する</button>
+      <button type="button" class="join-game" onclick="openJoinGameForm();">対局に参加する</button>
     </div>
     <div class="floor game-form">
-      <form action="/" style="display: none;" id="new-game-form">
+      <form style="display: none;" name="new-game-form" id="new-game-form">
         <div class="igo-grid-number">
           <label for="igo-grid-number">盤の大きさ: </label>
           <input type="number" name="igo-grid-number" id="igo-grid-number" value="19" min="2" max="19">
@@ -27,12 +27,15 @@
           <label for="nickname">さん</label>
         </div>
         <div>
-          <button class="back" onclick="closeGameForm();" style="display: none;">戻る</button>
-          <button class="new-game-submit" onclick="">対局を作成</button>
+          <button type="button" class="back" onclick="closeGameForm();" style="display: none;">戻る</button>
+          <button type="button" class="new-game-submit" onclick="submitNewGameForm();">新たな対局を作成する</button>
         </div>
       </form>
-      <form action="/" style="display: none;" id="join-game-form">
-        a
+      <form style="display: none;" id="join-game-form">
+        <div>
+          <button type="button" class="back" onclick="closeGameForm();" style="display: none;">戻る</button>
+          <button type="button" class="join-game-submit" onclick="submitNewGameForm();">対局に参加する</button>
+        </div>
       </form>
     </div>
   </div>
