@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+	"github.com/k0kubun/pp"
 	"github.com/kakudo415/kid"
 	"github.com/kakudo415/online-igo/kvs"
 )
@@ -70,6 +71,7 @@ func Handle(w http.ResponseWriter, r *http.Request, gameID kid.ID, password stri
 		var req ReqJSON
 		e := conn.ReadJSON(&req)
 		if e != nil {
+			pp.Print(e)
 			conn.Close()
 			delete(clients[gameID], conn)
 			break
@@ -77,31 +79,22 @@ func Handle(w http.ResponseWriter, r *http.Request, gameID kid.ID, password stri
 		var res ResJSON
 		res.GameID = gameID
 		res.Type = req.Type
-		if req.Type == "history" {
-			history, e := kvs.GetHistory(gameID)
-			if e != nil {
-				break
-			}
-			res.History = history
-			go func() {
-				e := conn.WriteJSON(res)
-				if e != nil {
-					conn.Close()
-					delete(clients[res.GameID], conn)
-				}
-			}()
-		}
+		// if req.Type == "history" {
+		// 	history, e := kvs.GetHistory(gameID)
+		// 	if e != nil {
+		// 		break
+		// 	}
+		// 	res.History = history
+		// 	go func() {
+		// 		e := conn.WriteJSON(res)
+		// 		if e != nil {
+		// 			conn.Close()
+		// 			delete(clients[res.GameID], conn)
+		// 		}
+		// 	}()
+		// }
 		if req.Type == "action" {
 			if !hasAuth {
-				go func() {
-					var emptyRes ResJSON
-					emptyRes.Type = req.Type
-					e := conn.WriteJSON(emptyRes)
-					if e != nil {
-						conn.Close()
-						delete(clients[res.GameID], conn)
-					}
-				}()
 				break
 			}
 			res.Action.Te = req.Action.Te
