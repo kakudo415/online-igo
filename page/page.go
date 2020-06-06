@@ -26,6 +26,7 @@ func Game(c *gin.Context) {
 		return
 	}
 	content := map[string]interface{}{}
+	content["gameID"] = gameID.ToHex(true)
 	content["gridNumber"] = gameSetting.GridNumber
 	content["lastGridNumber"] = gameSetting.GridNumber - 1
 	if c.Query("p") == gameSetting.PasswordAsMaster {

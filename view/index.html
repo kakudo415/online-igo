@@ -31,10 +31,23 @@
           <button type="button" class="new-game-submit" onclick="submitNewGameForm();">新たな対局を作成する</button>
         </div>
       </form>
-      <form style="display: none;" id="join-game-form">
+      <form style="display: none;" name="join-game-form" id="join-game-form">
+        <div class="game-id">
+          <label for="game-id">部屋ID: </label>
+          <input type="text" name="game-id" id="game-id">
+        </div>
+        <div class="game-id">
+          <label for="password">パスワード: </label>
+          <input type="text" name="password" id="password">
+        </div>
+        <div class="nickname">
+          <label for="join-nickname">ニックネーム: </label>
+          <input type="text" name="join-nickname" id="join-nickname" placeholder="通りすがりの棋士">
+          <label for="join-nickname">さん</label>
+        </div>
         <div>
           <button type="button" class="back" onclick="closeGameForm();" style="display: none;">戻る</button>
-          <button type="button" class="join-game-submit" onclick="submitNewGameForm();">対局に参加する</button>
+          <button type="button" class="join-game-submit" onclick="submitJoinGameForm();">対局に参加する</button>
         </div>
       </form>
     </div>

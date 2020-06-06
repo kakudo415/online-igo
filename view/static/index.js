@@ -5,6 +5,7 @@ const openJoinGameFormButtonHTML = document.getElementsByClassName("join-game")[
 const newGameFormHTML = document.getElementById('new-game-form');
 const joinGameFormHTML = document.getElementById('join-game-form');
 const newGameForm = document.forms["new-game-form"].elements;
+const joinGameForm = document.forms["join-game-form"].elements;
 
 const closeGameForm = () => {
   newGameFormHTML.style.display = "none";
@@ -41,8 +42,7 @@ const submitNewGameForm = () => {
     nickname = newGameForm["nickname"].value;
   }
   let message = {
-    "grid-number": Number(newGameForm["igo-grid-number"].value),
-    "nickname": nickname
+    "grid-number": Number(newGameForm["igo-grid-number"].value)
   };
   const request = new Request("/", {
     method: "POST",
@@ -68,4 +68,12 @@ const submitNewGameForm = () => {
     }
     location.href = `/game/${json["game-id"]}?p=${passwordMax}`;
   });
+};
+
+const submitJoinGameForm = () => {
+  if (joinGameForm["password"].value) {
+    location.href = `/game/${joinGameForm["game-id"].value}?p=${joinGameForm["password"].value}`;
+  } else {
+    location.href = `/game/${joinGameForm["game-id"].value}`;
+  }
 };

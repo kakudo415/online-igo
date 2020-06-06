@@ -9,8 +9,7 @@ import (
 )
 
 type newGameFormJSON struct {
-	GridNumber int    `json:"grid-number"`
-	Nickname   string `json:"nickname"`
+	GridNumber int `json:"grid-number"`
 }
 
 type newGameInfoJSON struct {
