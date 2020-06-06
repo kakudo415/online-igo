@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  {{ template "header" }}
+  <link rel="stylesheet" href="static/index.css">
+  <script src="static/index.js" defer></script>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="floor">
+      <h1><a href="/">Online 囲碁</a></h1>
+    </div>
+    <div>{{ .passwordAsMaster }}</div>
+    <div>{{ .passwordAsBlack }}</div>
+    <div>{{ .passwordAsWhite }}</div>
+  </div>
+</body>
+</html>
