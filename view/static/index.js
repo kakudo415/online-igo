@@ -56,17 +56,7 @@ const submitNewGameForm = () => {
     }
     return response.json();
   }).then((json) => {
-    passwordMax = "";
-    if (json["password-as-black"].length > 0) {
-      passwordMax = json["password-as-black"];
-    }
-    if (json["password-as-white"].length > 0) {
-      passwordMax = json["password-as-white"];
-    }
-    if (json["password-as-master"].length > 0) {
-      passwordMax = json["password-as-master"];
-    }
-    location.href = `/game/${json["game-id"]}?p=${passwordMax}`;
+    location.href = `/game/${json["game-id"]}?p=${json["password"]}`;
   });
 };
 

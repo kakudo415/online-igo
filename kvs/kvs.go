@@ -1,6 +1,10 @@
 package kvs
 
 import (
+	"errors"
+	"strconv"
+	"strings"
+
 	"github.com/gomodule/redigo/redis"
 	"github.com/kakudo415/kid"
 	"github.com/sethvargo/go-password/password"
@@ -10,10 +14,15 @@ var conn redis.Conn
 
 // GameSetting provide setting and passwords
 type GameSetting struct {
-	GridNumber       int
-	PasswordAsMaster string
-	PasswordAsBlack  string
-	PasswordAsWhite  string
+	GridNumber int
+	Password   string
+}
+
+// Kifu is history of game
+type Kifu struct {
+	Te     string `json:"te"`
+	Column int    `json:"column"`
+	Row    int    `json:"row"`
 }
 
 func init() {
@@ -35,28 +44,12 @@ func NewGame(gridNumber int) kid.ID {
 		return 0
 	}
 
-	passMaster, err := password.Generate(10, 3, 0, false, false)
-	if err != nil {
-		return 0
-	}
-	passBlack, err := password.Generate(10, 4, 0, false, false)
-	if err != nil {
-		return 0
-	}
-	passWhite, err := password.Generate(10, 5, 0, false, false)
+	password, err := password.Generate(10, 3, 0, false, false)
 	if err != nil {
 		return 0
 	}
 
-	_, err = conn.Do("SET", "igo."+gameID.ToHex(true)+".setting.password.master", passMaster)
-	if err != nil {
-		return 0
-	}
-	_, err = conn.Do("SET", "igo."+gameID.ToHex(true)+".setting.password.black", passBlack)
-	if err != nil {
-		return 0
-	}
-	_, err = conn.Do("SET", "igo."+gameID.ToHex(true)+".setting.password.white", passWhite)
+	_, err = conn.Do("SET", "igo."+gameID.ToHex(true)+".setting.password", password)
 	if err != nil {
 		return 0
 	}
@@ -71,21 +64,48 @@ func GetGameSetting(gameID kid.ID) (GameSetting, error) {
 	if err != nil {
 		return s, err
 	}
-	passMaster, err := redis.String(conn.Do("GET", "igo."+gameID.ToHex(true)+".setting.password.master"))
-	if err != nil {
-		return s, err
-	}
-	passBlack, err := redis.String(conn.Do("GET", "igo."+gameID.ToHex(true)+".setting.password.black"))
-	if err != nil {
-		return s, err
-	}
-	passWhite, err := redis.String(conn.Do("GET", "igo."+gameID.ToHex(true)+".setting.password.white"))
+	password, err := redis.String(conn.Do("GET", "igo."+gameID.ToHex(true)+".setting.password"))
 	if err != nil {
 		return s, err
 	}
 	s.GridNumber = gridNumber
-	s.PasswordAsMaster = passMaster
-	s.PasswordAsBlack = passBlack
-	s.PasswordAsWhite = passWhite
+	s.Password = password
 	return s, err
+}
+
+// PushHistory saves new kifu to list
+func PushHistory(gameID kid.ID, kifu Kifu) error {
+	if kifu.Te != "b" && kifu.Te != "w" && kifu.Te != "rm" {
+		return errors.New("不正な手です")
+	}
+	k := kifu.Te + ":" + strconv.Itoa(kifu.Column) + ":" + strconv.Itoa(kifu.Row)
+	_, err := conn.Do("RPUSH", "igo."+gameID.ToHex(true)+".kifu", k)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// GetHistory returns history of game
+func GetHistory(gameID kid.ID) ([]Kifu, error) {
+	rawHistory, err := redis.Strings(conn.Do("LRANGE", "igo."+gameID.ToHex(true)+".kifu", 0, -1))
+	if err != nil {
+		return nil, err
+	}
+	var gameHistory []Kifu
+	for _, history := range rawHistory {
+		token := strings.Split(history, ":")
+		var kifu Kifu
+		kifu.Te = token[0]
+		kifu.Column, err = strconv.Atoi(token[1])
+		if err != nil {
+			return nil, err
+		}
+		kifu.Row, err = strconv.Atoi(token[2])
+		if err != nil {
+			return nil, err
+		}
+		gameHistory = append(gameHistory, kifu)
+	}
+	return gameHistory, nil
 }
