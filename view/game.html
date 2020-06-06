@@ -2,17 +2,88 @@
 <html lang="ja">
 <head>
   {{ template "header" }}
-  <link rel="stylesheet" href="static/index.css">
-  <script src="static/index.js" defer></script>
+  <link rel="stylesheet" href="/static/game.css">
+  <script src="/static/game.js" defer></script>
 </head>
 <body>
   <div class="wrapper">
     <div class="floor">
       <h1><a href="/">Online 囲碁</a></h1>
     </div>
-    <div>{{ .passwordAsMaster }}</div>
-    <div>{{ .passwordAsBlack }}</div>
-    <div>{{ .passwordAsWhite }}</div>
+    <div class="goban">
+      {{ $rowArray := .rowArray }}
+      {{ $colArray := .colArray }}
+      {{ $lastGridNumber := .lastGridNumber }}
+
+      {{ range $ri, $r := $rowArray }}
+      <div class="row">
+        {{ range $ci, $c := $colArray }}
+        <button class="me me{{ $ci }}-{{ $ri }}" onclick="chakushu({{ $ci }}, {{ $ri }});">
+          {{ if and (eq $ri 0) (eq $ci 0) }}
+          <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 100 100">
+            <line x1="50" y1="50" x2="50" y2="100" stroke="#000" stroke-width="1" />
+            <line x1="50" y1="50" x2="100" y2="50" stroke="#000" stroke-width="1" />
+          </svg>
+          {{ else if and (eq $ri 0) (eq $ci $lastGridNumber) }}
+          <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 100 100">
+            <line x1="50" y1="50" x2="50" y2="100" stroke="#000" stroke-width="1" />
+            <line x1="0" y1="50" x2="50" y2="50" stroke="#000" stroke-width="1" />
+          </svg>
+          {{ else if and (eq $ri $lastGridNumber) (eq $ci 0) }}
+          <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 100 100">
+            <line x1="50" y1="0" x2="50" y2="50" stroke="#000" stroke-width="1" />
+            <line x1="50" y1="50" x2="100" y2="50" stroke="#000" stroke-width="1" />
+          </svg>
+          {{ else if and (eq $ri $lastGridNumber) (eq $ci $lastGridNumber) }}
+          <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 100 100">
+            <line x1="50" y1="0" x2="50" y2="50" stroke="#000" stroke-width="1" />
+            <line x1="0" y1="50" x2="50" y2="50" stroke="#000" stroke-width="1" />
+          </svg>
+          {{ else if eq $ri 0 }}
+          <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 100 100">
+            <line x1="50" y1="50" x2="50" y2="100" stroke="#000" stroke-width="1" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#000" stroke-width="1" />
+          </svg>
+          {{ else if eq $ri $lastGridNumber }}
+          <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 100 100">
+            <line x1="50" y1="0" x2="50" y2="50" stroke="#000" stroke-width="1" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#000" stroke-width="1" />
+          </svg>
+          {{ else if eq $ci 0 }}
+          <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 100 100">
+            <line x1="50" y1="0" x2="50" y2="100" stroke="#000" stroke-width="1" />
+            <line x1="50" y1="50" x2="100" y2="50" stroke="#000" stroke-width="1" />
+          </svg>
+          {{ else if eq $ci $lastGridNumber }}
+          <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 100 100">
+            <line x1="50" y1="0" x2="50" y2="100" stroke="#000" stroke-width="1" />
+            <line x1="0" y1="50" x2="50" y2="50" stroke="#000" stroke-width="1" />
+          </svg>
+          {{ else }}
+          <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 100 100">
+            <line x1="50" y1="0" x2="50" y2="100" stroke="#000" stroke-width="1" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#000" stroke-width="1" />
+          </svg>
+          {{ end }}
+          <div class="ishi black"></div>
+          <div class="ishi white"></div>
+        </button>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+    <div class="floor">
+      <h2>対局情報</h2>
+      <div class="game-info">
+
+      </div>
+      <h2>部屋情報</h2>
+      <div class="room-info">
+        <p>師範パスワード: {{ .passwordAsMaster }}</p>
+        <p>黒 パスワード: {{ .passwordAsBlack }}</p>
+        <p>白 パスワード: {{ .passwordAsWhite }}</p>
+      </div>
+    </div>
   </div>
 </body>
 </html>

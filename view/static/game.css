@@ -1,0 +1,47 @@
+.goban {
+  margin: 0.75rem 0;
+  background: #DEB887;
+}
+
+.me {
+  position: relative;
+}
+
+.me:hover {
+  background: #FFFFFF55;
+}
+
+.ishi {
+  position: absolute;
+  border-radius: 50%;
+  visibility: hidden;
+}
+
+.ishi.black {
+  top: 1%;
+  left: 1%;
+  height: 98%;
+  width: 98%;
+  background: linear-gradient(-45deg, #000, #777);
+  box-shadow: 0.2rem 0.2rem 0.1rem #0007;
+}
+
+.ishi.white {
+  top: 2%;
+  left: 2%;
+  height: 96%;
+  width: 96%;
+  background: linear-gradient(-45deg, #000, #777);
+  background: linear-gradient(-45deg, #AAA, #FFF);
+  box-shadow: 0.2rem 0.2rem 0.1rem #0003;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.row>* {
+  width: 100%;
+  text-align: center;
+}
