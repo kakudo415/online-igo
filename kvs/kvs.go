@@ -44,7 +44,7 @@ func NewGame(gridNumber int) kid.ID {
 		return 0
 	}
 
-	password, err := password.Generate(10, 3, 0, false, false)
+	password, err := password.Generate(10, 3, 0, true, false)
 	if err != nil {
 		return 0
 	}
