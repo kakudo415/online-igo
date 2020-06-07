@@ -85,3 +85,28 @@
 .game-control label:hover {
   background: #DEB887BB;
 }
+
+.floor.room-info {
+  background: #DEB887;
+  padding: 0.75rem;
+}
+
+.room-info h2 {
+  font-family: serif;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.room-info p {
+  margin: 1.5rem 0 0;
+  font-size: 1.25rem;
+}
+
+.room-info p+p {
+  margin: 0.5rem 0 0;
+}
+
+.room-info span {
+  display: block;
+  margin: 0.5rem 0 0;
+}

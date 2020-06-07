@@ -90,11 +90,15 @@
         </form>
       </div>
     </div>
-    <div class="floor">
+    <div class="floor room-info">
       <h2>部屋情報</h2>
       <div class="room-info">
-        <p>部屋ID: {{ .gameID }}</p>
-        <p>パスワード: {{ .password }}</p>
+        <p>部屋ID</p>
+        <p>{{ .gameID }}</p>
+        <span>部屋IDを知っている人はこの盤面を見ることができます</span>
+        <p>パスワード</p>
+        <p>{{ .password }}</p>
+        <span>パスワードを知っている人はこの盤面を操作することができます</span>
       </div>
     </div>
   </div>
