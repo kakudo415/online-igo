@@ -1,10 +1,14 @@
 let banmen = new Array(19); // COLUMN ROW
+let banmenSize;
 let kifu = [];
 let ws;
 let gameControlForm = document.forms["game-control"].elements;
 
 const init = () => {
-  return new Promise((resolve, reject) => { resolve() });
+  return new Promise((resolve, reject) => {
+    banmenSize = document.querySelectorAll(".row").length;
+    resolve();
+  });
 };
 
 const makeBanmen = () => {
@@ -42,8 +46,8 @@ const getHistory = () => {
 
 const renderBanmen = () => {
   return new Promise((resolve, reject) => {
-    for (i = 0; i < banmen.length; i++) {
-      for (j = 0; j < banmen[i].length; j++) {
+    for (i = 0; i < banmenSize; i++) {
+      for (j = 0; j < banmenSize; j++) {
         switch (banmen[i][j]) {
           case 0:
             document.querySelector(`.me${i}-${j} > .ishi.black`).style.visibility = "hidden";

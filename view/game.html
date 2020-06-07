@@ -75,14 +75,22 @@
     <div class="floor">
       <div class="game-control">
         <form name="game-control">
-          <input type="radio" name="use-color" value="black" id="use-color-black" checked="checked">
-          <label for="use-color-black">黒</label>
-          <input type="checkbox" name="alternately" value="checked" id="alternately">
-          <label for="alternately">交互</label>
-          <input type="radio" name="use-color" value="white" id="use-color-white">
-          <label for="use-color-white">白</label>
+          <div>
+            <input type="radio" name="use-color" value="black" id="use-color-black" checked="checked">
+            <label for="use-color-black">黒</label>
+          </div>
+          <div>
+            <input type="checkbox" name="alternately" id="alternately" checked="checked">
+            <label for="alternately">交互</label>
+          </div>
+          <div>
+            <input type="radio" name="use-color" value="white" id="use-color-white">
+            <label for="use-color-white">白</label>
+          </div>
         </form>
       </div>
+    </div>
+    <div class="floor">
       <h2>部屋情報</h2>
       <div class="room-info">
         <p>部屋ID: {{ .gameID }}</p>

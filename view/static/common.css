@@ -10,6 +10,10 @@ svg {
   max-width: 90rem;
 }
 
+.floor {
+  margin: 0 0 0.75rem 0;
+}
+
 button {
   cursor: pointer;
   border-radius: 0;
@@ -17,4 +21,15 @@ button {
 
 input {
   -webkit-appearance: auto;
+}
+
+h1 {
+  font-family: serif;
+  font-weight: bold;
+  padding: 0.75rem 0;
+  font-size: 1.5rem;
+}
+
+h1 a:hover {
+  color: #000A;
 }
