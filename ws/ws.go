@@ -99,16 +99,18 @@ func Handle(w http.ResponseWriter, r *http.Request, gameID kid.ID, password stri
 // Broadcast serve message
 func Broadcast() {
 	for {
-		res := <-broadcast
-		for client := range clients[res.GameID] {
-			e := client.WriteJSON(res)
-			if e != nil {
-				client.Close()
-				delete(clients[res.GameID], client)
+		select {
+		case res := <-broadcast:
+			for client := range clients[res.GameID] {
+				e := client.WriteJSON(res)
+				if e != nil {
+					client.Close()
+					delete(clients[res.GameID], client)
+				}
 			}
-		}
-		if len(clients[res.GameID]) == 0 {
-			delete(clients, res.GameID)
+			if len(clients[res.GameID]) == 0 {
+				delete(clients, res.GameID)
+			}
 		}
 	}
 }
