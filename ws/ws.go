@@ -99,18 +99,16 @@ func Handle(w http.ResponseWriter, r *http.Request, gameID kid.ID, password stri
 // Broadcast serve message
 func Broadcast() {
 	for {
-		select {
-		case res := <-broadcast:
-			for client := range clients[res.GameID] {
-				e := client.WriteJSON(res)
-				if e != nil {
-					client.Close()
-					delete(clients[res.GameID], client)
-				}
+		res := <-broadcast
+		for client := range clients[res.GameID] {
+			e := client.WriteJSON(res)
+			if e != nil {
+				client.Close()
+				delete(clients[res.GameID], client)
 			}
-			if len(clients[res.GameID]) == 0 {
-				delete(clients, res.GameID)
-			}
+		}
+		if len(clients[res.GameID]) == 0 {
+			delete(clients, res.GameID)
 		}
 	}
 }
@@ -119,6 +117,7 @@ func Broadcast() {
 func UserCounter() {
 	before := 0
 	ticker := time.NewTicker(5 * time.Second)
+	defer ticker.Stop()
 	for {
 		_ = <-ticker.C
 		after := 0
