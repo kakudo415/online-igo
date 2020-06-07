@@ -23,6 +23,7 @@ func main() {
 		ws.Handle(c.Writer, c.Request, kid.Parse((c.Param("game-id"))), c.Query("p"))
 	})
 	go ws.Broadcast()
+	go ws.UserCounter()
 
 	e.LoadHTMLGlob("./view/*.html")
 	e.Static("static", "./view/static/")

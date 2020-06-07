@@ -3,6 +3,7 @@ package ws
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/kakudo415/kid"
@@ -97,25 +98,38 @@ func Handle(w http.ResponseWriter, r *http.Request, gameID kid.ID, password stri
 
 // Broadcast serve message
 func Broadcast() {
-	lastNumUsers := 0
 	for {
 		res := <-broadcast
-		numUsers := 0
 		for client := range clients[res.GameID] {
 			e := client.WriteJSON(res)
 			if e != nil {
 				client.Close()
 				delete(clients[res.GameID], client)
-			} else {
-				numUsers++
 			}
 		}
 		if len(clients[res.GameID]) == 0 {
 			delete(clients, res.GameID)
 		}
-		if lastNumUsers != numUsers {
-			fmt.Printf("WebSocket 接続中クライアント数 = %d\n", numUsers)
-			lastNumUsers = numUsers
+	}
+}
+
+// UserCounter counts number of users every 5 seconds
+func UserCounter() {
+	before := 0
+	after := 0
+	ticker := time.NewTicker(5 * time.Second)
+	for {
+		_ = <-ticker.C
+		for _, rooms := range clients {
+			for _, user := range rooms {
+				if user {
+					after++
+				}
+			}
+		}
+		if before != after {
+			fmt.Printf("WebSocket 接続中クライアント数 = %d\n", after)
+			before = after
 		}
 	}
 }
