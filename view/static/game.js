@@ -70,7 +70,7 @@ const renderBanmen = () => {
 
 const makeWebSocket = () => {
   return new Promise((resolve, reject) => {
-    ws = new WebSocket(`ws://${location.host}${location.pathname}/ws${location.search}`);
+    ws = new WebSocket(`wss://${location.host}${location.pathname}/ws${location.search}`);
     ws.onopen = () => {
       console.log("WebSocket Open");
       ws.onmessage = (ev) => {

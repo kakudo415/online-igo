@@ -50,14 +50,14 @@ const submitNewGameForm = () => {
     }
     return response.json();
   }).then((json) => {
-    location.href = `/game/${json["game-id"]}?p=${json["password"]}`;
+    location.href = `./game/${json["game-id"]}?p=${json["password"]}`;
   });
 };
 
 const submitJoinGameForm = () => {
   if (joinGameForm["password"].value) {
-    location.href = `/game/${joinGameForm["game-id"].value}?p=${joinGameForm["password"].value}`;
+    location.href = `./game/${joinGameForm["game-id"].value}?p=${joinGameForm["password"].value}`;
   } else {
-    location.href = `/game/${joinGameForm["game-id"].value}`;
+    location.href = `./game/${joinGameForm["game-id"].value}`;
   }
 };
