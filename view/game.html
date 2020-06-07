@@ -96,9 +96,11 @@
         <p>部屋ID</p>
         <p>{{ .gameID }}</p>
         <span>部屋IDを知っている人はこの盤面を見ることができます</span>
+        {{ if .password }}
         <p>パスワード</p>
         <p>{{ .password }}</p>
         <span>パスワードを知っている人はこの盤面を操作することができます</span>
+        {{ end }}
       </div>
     </div>
   </div>
