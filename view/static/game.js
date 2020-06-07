@@ -86,11 +86,23 @@ const makeWebSocket = () => {
             case "rm":
               banmen[msg.action.column][msg.action.row] = 0;
           }
-          renderBanmen();
+          renderBanmen()
+            .catch((err) => {
+              console.error(err);
+            });
         }
       };
       ws.onclose = (ev) => {
-        setTimeout(() => { init(); }, 1000);
+        setTimeout(() => {
+          init()
+            .then(() => makeBanmen())
+            .then(() => getHistory())
+            .then(() => makeWebSocket())
+            .then(() => renderBanmen())
+            .catch((err) => {
+              console.error(err);
+            });
+        }, 1000);
       };
       console.log("WebSocket Ready");
     };
