@@ -99,15 +99,19 @@ func Handle(w http.ResponseWriter, r *http.Request, gameID kid.ID, password stri
 func Broadcast() {
 	for {
 		res := <-broadcast
+		numUsers := 0
 		for client := range clients[res.GameID] {
 			e := client.WriteJSON(res)
 			if e != nil {
 				client.Close()
 				delete(clients[res.GameID], client)
-			}
-			if len(clients[res.GameID]) == 0 {
-				delete(clients, res.GameID)
+			} else {
+				numUsers++
 			}
 		}
+		if len(clients[res.GameID]) == 0 {
+			delete(clients, res.GameID)
+		}
+		println(numUsers)
 	}
 }

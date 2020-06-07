@@ -115,3 +115,18 @@
   display: block;
   margin: 0.5rem 0 0;
 }
+
+@media screen and (max-width: 600px) {
+  .game-control form>div input {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+  .game-control label {
+    height: 3rem;
+    font-size: 1.5rem;
+    padding: 0.75rem;
+  }
+}

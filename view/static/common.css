@@ -33,3 +33,9 @@ h1 {
 h1 a:hover {
   color: #000A;
 }
+
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 14px;
+  }
+}
