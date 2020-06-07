@@ -116,10 +116,10 @@ func Broadcast() {
 // UserCounter counts number of users every 5 seconds
 func UserCounter() {
 	before := 0
-	after := 0
 	ticker := time.NewTicker(5 * time.Second)
 	for {
 		_ = <-ticker.C
+		after := 0
 		for _, rooms := range clients {
 			for _, user := range rooms {
 				if user {
