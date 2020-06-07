@@ -107,10 +107,10 @@
         {{ end }}
         <p>URL</p>
         {{ if .password }}
-        <p><a href="{{ .baseURL }}/game/{{ .gameID }}?p={{ .password }}">{{ .baseURL }}/game/{{ .gameID }}?p={{ .password }}</a></p>
+        <p><a href="{{ .baseURL }}game/{{ .gameID }}?p={{ .password }}">{{ .baseURL }}/game/{{ .gameID }}?p={{ .password }}</a></p>
         <span>このURLからでも盤面を操作できます</span>
         {{ end }}
-        <p><a href="{{ .baseURL }}/game/{{ .gameID }}">{{ .baseURL }}/game/{{ .gameID }}</a></p>
+        <p><a href="{{ .baseURL }}game/{{ .gameID }}">{{ .baseURL }}/game/{{ .gameID }}</a></p>
         <span>このURLからでも盤面を見られます</span>
       </div>
     </div>
