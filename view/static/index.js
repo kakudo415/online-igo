@@ -38,7 +38,7 @@ const submitNewGameForm = () => {
   let message = {
     "grid-number": Number(newGameForm["igo-grid-number"].value)
   };
-  const request = new Request("/", {
+  const request = new Request("./", {
     method: "POST",
     body: JSON.stringify(message)
   });
