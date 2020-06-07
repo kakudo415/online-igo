@@ -97,6 +97,7 @@ func Handle(w http.ResponseWriter, r *http.Request, gameID kid.ID, password stri
 
 // Broadcast serve message
 func Broadcast() {
+	lastNumUsers := 0
 	for {
 		res := <-broadcast
 		numUsers := 0
@@ -112,6 +113,9 @@ func Broadcast() {
 		if len(clients[res.GameID]) == 0 {
 			delete(clients, res.GameID)
 		}
-		println(numUsers)
+		if lastNumUsers != numUsers {
+			fmt.Printf("WebSocket 接続中クライアント数 = %d\n", numUsers)
+			lastNumUsers = numUsers
+		}
 	}
 }
