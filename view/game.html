@@ -84,7 +84,7 @@
             <label for="use-color-black">黒</label>
           </div>
           <div>
-            <input type="checkbox" name="alternately" id="alternately" checked="checked">
+            <input type="checkbox" name="alternately" id="alternately">
             <label for="alternately">交互</label>
           </div>
           <div>
@@ -105,6 +105,13 @@
         <p>{{ .password }}</p>
         <span>パスワードを知っている人はこの盤面を操作することができます</span>
         {{ end }}
+        <p>URL</p>
+        {{ if .password }}
+        <a href="{{ .baseURL }}/game/{{ .gameID }}?p={{ .password }}">{{ .baseURL }}/game/{{ .gameID }}?p={{ .password }}</a>
+        <span>このURLからでも盤面を操作できます</span>
+        {{ end }}
+        <a href="{{ .baseURL }}/game/{{ .gameID }}">{{ .baseURL }}/game/{{ .gameID }}</a>
+        <span>このURLからでも盤面を見られます</span>
       </div>
     </div>
   </div>
