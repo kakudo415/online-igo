@@ -35,12 +35,6 @@ const openJoinGameForm = () => {
 };
 
 const submitNewGameForm = () => {
-  let nickname = "";
-  if (newGameForm["nickname"].value === "") {
-    nickname = "通りすがりの棋士";
-  } else {
-    nickname = newGameForm["nickname"].value;
-  }
   let message = {
     "grid-number": Number(newGameForm["igo-grid-number"].value)
   };
