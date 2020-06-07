@@ -11,6 +11,11 @@
   background: #FFFFFF55;
 }
 
+.me:disabled:hover {
+  background: none;
+  cursor: default;
+}
+
 .ishi {
   position: absolute;
   border-radius: 50%;

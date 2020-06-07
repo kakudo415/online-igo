@@ -14,11 +14,12 @@
       {{ $rowArray := .rowArray }}
       {{ $colArray := .colArray }}
       {{ $lastGridNumber := .lastGridNumber }}
+      {{ $password := .password }}
 
       {{ range $ri, $r := $rowArray }}
       <div class="row">
         {{ range $ci, $c := $colArray }}
-        <button class="me me{{ $ci }}-{{ $ri }}" onclick="chakushu({{ $ci }}, {{ $ri }});">
+        <button class="me me{{ $ci }}-{{ $ri }}" onclick="chakushu({{ $ci }}, {{ $ri }});" {{ if $password }}{{ else }}disabled{{ end }}>
           {{ if and (eq $ri 0) (eq $ci 0) }}
           <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 100 100">
             <line x1="50" y1="50" x2="50" y2="100" stroke="#000" stroke-width="1" />
@@ -72,7 +73,7 @@
       </div>
       {{ end }}
     </div>
-    <div class="floor">
+    <div class="floor" {{ if .password }}{{ else }} style="display: none;" {{ end }}>
       <div class="game-control">
         <form name="game-control">
           <div>
