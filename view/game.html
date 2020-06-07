@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="/static/game.css">
   <script src="/static/game.js" defer></script>
 </head>
-<body>
+<body ontouchstart="">
   <div class="wrapper">
     <div class="floor">
       <h1><a href="/">Online 囲碁</a></h1>
@@ -73,9 +73,15 @@
       {{ end }}
     </div>
     <div class="floor">
-      <h2>対局情報</h2>
-      <div class="game-info">
-
+      <div class="game-control">
+        <form name="game-control">
+          <input type="radio" name="use-color" value="black" id="use-color-black" checked="checked">
+          <label for="use-color-black">黒</label>
+          <input type="checkbox" name="alternately" value="checked" id="alternately">
+          <label for="alternately">交互</label>
+          <input type="radio" name="use-color" value="white" id="use-color-white">
+          <label for="use-color-white">白</label>
+        </form>
       </div>
       <h2>部屋情報</h2>
       <div class="room-info">

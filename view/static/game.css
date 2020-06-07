@@ -45,3 +45,8 @@
   width: 100%;
   text-align: center;
 }
+
+input[type="radio"], input[type="checkbox"] {
+  width: 4rem;
+  height: auto;
+}

@@ -1,6 +1,7 @@
 let banmen = new Array(19); // COLUMN ROW
 let kifu = [];
 let ws;
+let gameControlForm = document.forms["game-control"].elements;
 
 const init = () => {
   return new Promise((resolve, reject) => { resolve() });
@@ -20,20 +21,22 @@ const getHistory = () => {
     fetch(`${location.origin}${location.pathname}/history`)
       .then((res) => { return res.json(); })
       .then((json) => {
-        json.forEach((kifu) => {
-          switch (kifu.te) {
+        json.history.forEach((h) => {
+          switch (h.te) {
             case "b":
-              banmen[kifu.column][kifu.row] = 1;
+              banmen[h.column][h.row] = 1;
               break;
             case "w":
-              banmen[kifu.column][kifu.row] = 2;
+              banmen[h.column][h.row] = 2;
               break;
             case "rm":
-              banmen[kifu.column][kifu.row] = 0;
+              banmen[h.column][h.row] = 0;
           }
+          kifu.push(h);
         });
       })
-      .then(() => { resolve(); });
+      .then(() => { resolve(); })
+      .catch(() => { resolve(); });
   });
 };
 
@@ -83,8 +86,7 @@ const makeWebSocket = () => {
         }
       };
       ws.onclose = (ev) => {
-        console.log(ev);
-        setTimeout(init, 1000);
+        setTimeout(() => { init(); }, 1000);
       };
       console.log("WebSocket Ready");
     };
@@ -102,18 +104,30 @@ const chakushu = (column, row) => {
       row: row
     }
   };
-  switch (banmen[column][row]) {
-    case 0:
+  switch (gameControlForm["use-color"].value) {
+    case "black":
       msg.action.te = "b";
       break;
-    case 1:
+    case "white":
       msg.action.te = "w";
       break;
-    case 2:
-      msg.action.te = "rm";
-      break;
+    default:
+      return;
+  }
+  if (banmen[column][row] > 0) {
+    msg.action.te = "rm";
   }
   ws.send(JSON.stringify(msg));
+  if (gameControlForm["alternately"].checked) {
+    switch (gameControlForm["use-color"].value) {
+      case "black":
+        document.querySelector("#use-color-white").checked = true;
+        break;
+      case "white":
+        document.querySelector("#use-color-black").checked = true;
+        break;
+    }
+  }
 };
 
 window.onload = () => {

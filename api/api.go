@@ -19,13 +19,8 @@ type newGameInfoJSON struct {
 }
 
 type gameHistoryJSON struct {
-	Kifu []kifuJSON `json:"kifu"`
-}
-
-type kifuJSON struct {
-	Column int `json:"column"`
-	Row    int `json:"row"`
-	Te     int `json:"te"`
+	Type    string     `json:"type"`
+	History []kvs.Kifu `json:"history"`
 }
 
 // NewGame makes new game interface and serves new game id
@@ -62,5 +57,8 @@ func History(c *gin.Context) {
 		c.Status(http.StatusNotFound)
 		return
 	}
-	c.JSON(http.StatusOK, history)
+	var historyJSON gameHistoryJSON
+	historyJSON.Type = "history"
+	historyJSON.History = history
+	c.JSON(http.StatusOK, historyJSON)
 }
