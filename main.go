@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/kakudo415/kid"
@@ -25,5 +27,5 @@ func main() {
 	e.LoadHTMLGlob("./view/*.html")
 	e.Static("static", "./view/static/")
 
-	e.Run(":8080")
+	e.Run(":" + os.Getenv("IGO_PATH"))
 }
