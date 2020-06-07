@@ -107,8 +107,16 @@
   font-size: 1.25rem;
 }
 
-.room-info p+p, .room-info a {
+.room-info p+p {
   margin: 0.5rem 0 0;
+}
+
+.room-info a {
+  color: #214778;
+}
+
+.room-info a:hover {
+  text-decoration: underline;
 }
 
 .room-info span {
