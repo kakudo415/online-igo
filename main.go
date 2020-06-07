@@ -27,5 +27,5 @@ func main() {
 	e.LoadHTMLGlob("./view/*.html")
 	e.Static("static", "./view/static/")
 
-	e.Run(":" + os.Getenv("IGO_PATH"))
+	e.Run(":" + os.Getenv("IGO_PORT"))
 }
