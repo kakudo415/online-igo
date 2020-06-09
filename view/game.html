@@ -108,12 +108,10 @@
         <span>パスワードを知っている人はこの盤面を操作することができます</span>
         {{ end }}
         <p>URL</p>
+        <p><a href="/game/{{ .gameID }}">このリンクからでも盤面を見られます</a></p>
         {{ if .password }}
-        <p><a href="/game/{{ .gameID }}?p={{ .password }}">/game/{{ .gameID }}?p={{ .password }}</a></p>
-        <span>このURLからでも盤面を操作できます</span>
+        <p><a href="/game/{{ .gameID }}?p={{ .password }}">このリンクからでも盤面を操作できます</a></p>
         {{ end }}
-        <p><a href="/game/{{ .gameID }}">/game/{{ .gameID }}</a></p>
-        <span>このURLからでも盤面を見られます</span>
       </div>
     </div>
   </div>

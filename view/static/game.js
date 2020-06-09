@@ -71,41 +71,54 @@ const renderBanmen = () => {
 const makeWebSocket = () => {
   return new Promise((resolve, reject) => {
     ws = new WebSocket(`wss://${location.host}${location.pathname}/ws${location.search}`);
-    ws.onopen = () => {
-      console.log("WebSocket Open");
-      ws.onmessage = (ev) => {
-        const msg = JSON.parse(ev.data);
-        if (msg.type === "action") {
-          switch (msg.action.te) {
-            case "b":
-              banmen[msg.action.column][msg.action.row] = 1;
-              break;
-            case "w":
-              banmen[msg.action.column][msg.action.row] = 2;
-              break;
-            case "rm":
-              banmen[msg.action.column][msg.action.row] = 0;
-          }
-          renderBanmen()
-            .catch((err) => {
-              console.error(err);
-            });
-        }
+    ws.onerror = (ev) => {
+      ws.close();
+      ws = new WebSocket(`ws://${location.host}${location.pathname}/ws${location.search}`);
+      ws.onopen = () => {
+        resolve();
       };
-      ws.onclose = (ev) => {
-        setTimeout(() => {
-          init()
-            .then(() => makeBanmen())
-            .then(() => getHistory())
-            .then(() => makeWebSocket())
-            .then(() => renderBanmen())
-            .catch((err) => {
-              console.error(err);
-            });
-        }, 1000);
-      };
-      console.log("WebSocket Ready");
     };
+    ws.onopen = () => {
+      resolve();
+    };
+  });
+};
+
+const prepareWebSocket = () => {
+  return new Promise((resolve, reject) => {
+    console.log("WebSocket Open");
+    ws.onmessage = (ev) => {
+      const msg = JSON.parse(ev.data);
+      if (msg.type === "action") {
+        switch (msg.action.te) {
+          case "b":
+            banmen[msg.action.column][msg.action.row] = 1;
+            break;
+          case "w":
+            banmen[msg.action.column][msg.action.row] = 2;
+            break;
+          case "rm":
+            banmen[msg.action.column][msg.action.row] = 0;
+        }
+        renderBanmen()
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    };
+    ws.onclose = (ev) => {
+      setTimeout(() => {
+        init()
+          .then(() => makeBanmen())
+          .then(() => getHistory())
+          .then(() => makeWebSocket())
+          .then(() => renderBanmen())
+          .catch((err) => {
+            console.error(err);
+          });
+      }, 1000);
+    };
+    console.log("WebSocket Ready");
     resolve();
   });
 };
@@ -151,6 +164,7 @@ window.onload = () => {
     .then(() => makeBanmen())
     .then(() => getHistory())
     .then(() => makeWebSocket())
+    .then(() => prepareWebSocket())
     .then(() => renderBanmen())
     .catch((err) => {
       console.error(err);
