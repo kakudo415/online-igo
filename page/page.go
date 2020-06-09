@@ -2,7 +2,6 @@ package page
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kakudo415/kid"
@@ -11,9 +10,7 @@ import (
 
 // Index serves top page
 func Index(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", gin.H{
-		"baseURL": os.Getenv("IGO_BASE_URL"),
-	})
+	c.HTML(http.StatusOK, "index.html", gin.H{})
 }
 
 // Game serves game page from game-id
@@ -29,7 +26,6 @@ func Game(c *gin.Context) {
 		return
 	}
 	content := map[string]interface{}{}
-	content["baseURL"] = os.Getenv("IGO_BASE_URL")
 	content["gameID"] = gameID.ToHex(true)
 	content["gridNumber"] = gameSetting.GridNumber
 	content["lastGridNumber"] = gameSetting.GridNumber - 1
