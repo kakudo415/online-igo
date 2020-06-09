@@ -146,8 +146,13 @@ const prepareWebSocket = () => {
         init()
           .then(() => clearBanmen())
           .then(() => getHistory())
+          .then(() => normalizeKifu())
+          .then(() => kifuToBanmen())
           .then(() => makeWebSocket())
+          .then(() => prepareWebSocket())
           .then(() => renderBanmen())
+          .then(() => renderKifu())
+          .then(() => renderAgehama())
           .catch((err) => {
             console.error(err);
           });
