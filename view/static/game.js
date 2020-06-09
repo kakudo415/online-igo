@@ -86,7 +86,7 @@ const makeWebSocket = () => {
 
 const prepareWebSocket = () => {
   return new Promise((resolve, reject) => {
-    console.log("WebSocket Open");
+    console.log(`WebSocket open ${ws.url}`);
     ws.onmessage = (ev) => {
       const msg = JSON.parse(ev.data);
       if (msg.type === "action") {
