@@ -4,6 +4,8 @@ let kifu = [];
 let ws;
 let kifuHTML = document.querySelector(".kifu-list");
 let gameControlForm = document.forms["game-control"].elements;
+let agehamaBlack = 0;
+let agehamaWhite = 0;
 
 const init = () => {
   return new Promise((resolve, reject) => {
@@ -87,7 +89,7 @@ const makeWebSocket = () => {
 
 const prepareWebSocket = () => {
   return new Promise((resolve, reject) => {
-    console.log(`WebSocket open ${ws.url}`);
+    console.log(`WebSocket open on ${ws.url}`);
     ws.onmessage = (ev) => {
       const msg = JSON.parse(ev.data);
       if (msg.type === "action") {
@@ -156,9 +158,11 @@ const renderKifu = () => {
             if (j !== i && v.column == kifu[j].column && v.row == kifu[j].row) {
               if (kifu[j].te == "b") {
                 teElm.textContent = "黒";
+                agehamaBlack++;
               }
               if (kifu[j].te == "w") {
                 teElm.textContent = "白";
+                agehamaWhite++;
               }
               break;
             }
@@ -172,6 +176,14 @@ const renderKifu = () => {
       kifuElm.appendChild(teElm);
       kifuHTML.insertBefore(kifuElm, kifuHTML.firstChild);
     });
+    resolve();
+  });
+};
+
+const renderAgehama = () => {
+  return new Promise((resolve, reject) => {
+    document.querySelector("#agehama-black").value = agehamaBlack;
+    document.querySelector("#agehama-white").value = agehamaWhite;
     resolve();
   });
 };
@@ -244,6 +256,7 @@ window.onload = () => {
     .then(() => prepareWebSocket())
     .then(() => renderBanmen())
     .then(() => renderKifu())
+    .then(() => renderAgehama())
     .catch((err) => {
       console.error(err);
     });

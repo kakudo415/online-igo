@@ -91,6 +91,26 @@
   background: #DEB887BB;
 }
 
+.agehama {
+  background: #DEB887;
+  display: flex;
+}
+
+.agehama>* {
+  height: 4rem;
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  font-family: serif;
+  font-weight: bold;
+  padding: 0.8rem;
+  margin-right: 0.75rem;
+}
+
+.agehama>*:last-child {
+  margin-right: 0;
+}
+
 .floor.room-info {
   padding: 0.75rem 0;
 }
