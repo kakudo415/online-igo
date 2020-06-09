@@ -48,6 +48,7 @@ func NewGame(gridNumber int) kid.ID {
 	if err != nil {
 		return 0
 	}
+	password = strings.ToUpper(password)
 
 	_, err = conn.Do("SET", "igo."+gameID.ToHex(true)+".setting.password", password)
 	if err != nil {
