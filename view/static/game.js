@@ -2,6 +2,7 @@ let banmen = new Array(19); // COLUMN ROW
 let banmenSize;
 let kifu = [];
 let ws;
+let kifuHTML = document.querySelector(".kifu-list");
 let gameControlForm = document.forms["game-control"].elements;
 
 const init = () => {
@@ -100,7 +101,9 @@ const prepareWebSocket = () => {
           case "rm":
             banmen[msg.action.column][msg.action.row] = 0;
         }
+        kifu.push({ te: msg.action.te, row: msg.action.row, column: msg.action.column });
         renderBanmen()
+          .then(() => renderKifu())
           .catch((err) => {
             console.error(err);
           });
@@ -121,6 +124,80 @@ const prepareWebSocket = () => {
     console.log("WebSocket Ready");
     resolve();
   });
+};
+
+const renderKifu = () => {
+  return new Promise((resolve, reject) => {
+    kifu.forEach((v, i) => {
+      if (i < kifuHTML.childElementCount) {
+        return;
+      }
+      let kifuElm = document.createElement("div");
+      let indexElm = document.createElement("div");
+      indexElm.classList.add("kifu-index");
+      indexElm.textContent = `${i + 1}手目`;
+      let xElm = document.createElement("div");
+      xElm.classList.add("kifu-zahyou");
+      xElm.textContent = `${v.column + 1} `;
+      let yElm = document.createElement("div");
+      yElm.classList.add("kifu-zahyou");
+      yElm.textContent = `${numToKanji(v.row + 1)} `;
+      let teElm = document.createElement("div");
+      teElm.classList.add("kifu-te");
+      switch (v.te) {
+        case "b":
+          teElm.textContent = "黒";
+          break;
+        case "w":
+          teElm.textContent = "白";
+          break;
+        case "rm":
+          for (j = i; j !== 0; j--) {
+            if (j !== i && v.column == kifu[j].column && v.row == kifu[j].row) {
+              if (kifu[j].te == "b") {
+                teElm.textContent = "黒";
+              }
+              if (kifu[j].te == "w") {
+                teElm.textContent = "白";
+              }
+              break;
+            }
+          }
+          teElm.textContent += "トル";
+          break;
+      }
+      kifuElm.appendChild(indexElm);
+      kifuElm.appendChild(xElm);
+      kifuElm.appendChild(yElm);
+      kifuElm.appendChild(teElm);
+      kifuHTML.insertBefore(kifuElm, kifuHTML.firstChild);
+    });
+    resolve();
+  });
+};
+
+const numToKanji = (num) => {
+  return {
+    1: "一",
+    2: "二",
+    3: "三",
+    4: "四",
+    5: "五",
+    6: "六",
+    7: "七",
+    8: "八",
+    9: "九",
+    10: "十",
+    11: "十一",
+    12: "十二",
+    13: "十三",
+    14: "十四",
+    15: "十五",
+    16: "十六",
+    17: "十七",
+    18: "十八",
+    19: "十九",
+  }[num];
 };
 
 const chakushu = (column, row) => {
@@ -166,6 +243,7 @@ window.onload = () => {
     .then(() => makeWebSocket())
     .then(() => prepareWebSocket())
     .then(() => renderBanmen())
+    .then(() => renderKifu())
     .catch((err) => {
       console.error(err);
     });

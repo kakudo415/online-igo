@@ -92,8 +92,7 @@
 }
 
 .floor.room-info {
-  background: #DEB887;
-  padding: 0.75rem;
+  padding: 0.75rem 0;
 }
 
 .room-info h2 {
@@ -112,7 +111,7 @@
 }
 
 .room-info a {
-  color: #214778;
+  color: #11C;
 }
 
 .room-info a:hover {
@@ -122,6 +121,49 @@
 .room-info span {
   display: block;
   margin: 0.5rem 0 0;
+}
+
+.floor.kifu {
+  padding: 0.75rem 0 0;
+}
+
+.kifu h2 {
+  font-family: serif;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.kifu-list {
+  max-height: 50rem;
+  margin-top: 1rem;
+  overflow-y: scroll;
+  border: 1px solid #0003;
+}
+
+.kifu-list>div {
+  padding: 0.75rem;
+  border-bottom: 1px solid #0003;
+  display: flex;
+}
+
+.kifu-list>div:last-of-type {
+  border-bottom: none;
+}
+
+.kifu-index {
+  min-width: 4rem;
+  text-align: right;
+  margin-right: 1rem;
+  color: #0009;
+}
+
+.kifu-zahyou {
+  min-width: 3rem;
+  text-align: right;
+}
+
+.kifu-te {
+  margin-left: 1rem;
 }
 
 @media screen and (max-width: 600px) {
