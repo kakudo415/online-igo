@@ -164,6 +164,7 @@
   padding: 0.75rem;
   border-bottom: 1px solid #0003;
   display: flex;
+  align-items: center;
 }
 
 .kifu-list>div:last-of-type {
@@ -178,12 +179,24 @@
 }
 
 .kifu-zahyou {
-  min-width: 3rem;
+  min-width: 2.5rem;
   text-align: right;
 }
 
 .kifu-te {
   margin-left: 1rem;
+}
+
+.kifu-rewind {
+  margin-left: auto;
+  padding: 0.6rem;
+  font-size: 0.8rem;
+  color: #FFF;
+  background: #1565c0;
+}
+
+.kifu-rewind:hover {
+  background: #5e92f3;
 }
 
 @media screen and (max-width: 600px) {

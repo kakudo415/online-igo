@@ -55,6 +55,7 @@ func History(c *gin.Context) {
 	history, err := kvs.GetHistory(kid.Parse((c.Param("game-id"))))
 	if err != nil {
 		c.Status(http.StatusNotFound)
+		pp.Println(err)
 		return
 	}
 	var historyJSON gameHistoryJSON

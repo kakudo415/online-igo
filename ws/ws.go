@@ -26,6 +26,9 @@ type ReqJSON struct {
 		Column int    `json:"column"`
 		Row    int    `json:"row"`
 	} `json:"Action"`
+	Rewind struct {
+		Dest int `json:"dest"`
+	} `json:"rewind"`
 }
 
 // ResJSON is response of action request
@@ -36,7 +39,10 @@ type ResJSON struct {
 		Te     string `json:"te"`
 		Column int    `json:"column"`
 		Row    int    `json:"row"`
-	} `json:"action,omitempty"`
+	} `json:"action"`
+	Rewind struct {
+		Dest int `json:"dest"`
+	} `json:"rewind"`
 }
 
 // Handle handle WebSocket request
@@ -91,8 +97,18 @@ func Handle(w http.ResponseWriter, r *http.Request, gameID kid.ID, password stri
 			if e != nil {
 				break
 			}
-			broadcast <- res
 		}
+		if req.Type == "rewind" {
+			if !hasAuth {
+				break
+			}
+			res.Rewind.Dest = req.Rewind.Dest
+			e := kvs.PushRewind(gameID, req.Rewind.Dest)
+			if e != nil {
+				break
+			}
+		}
+		broadcast <- res
 	}
 }
 

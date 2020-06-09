@@ -1,5 +1,6 @@
 let banmen = new Array(19); // COLUMN ROW
 let banmenSize;
+let rawKifu = [];
 let kifu = [];
 let ws;
 let kifuHTML = document.querySelector(".kifu-list");
@@ -14,7 +15,7 @@ const init = () => {
   });
 };
 
-const makeBanmen = () => {
+const clearBanmen = () => {
   return new Promise((resolve, reject) => {
     for (i = 0; i < banmen.length; i++) {
       banmen[i] = new Array(19).fill(0);
@@ -28,22 +29,33 @@ const getHistory = () => {
     fetch(`${location.origin}${location.pathname}/history`)
       .then((res) => { return res.json(); })
       .then((json) => {
-        json.history.forEach((h) => {
-          switch (h.te) {
-            case "b":
-              banmen[h.column][h.row] = 1;
-              break;
-            case "w":
-              banmen[h.column][h.row] = 2;
-              break;
-            case "rm":
-              banmen[h.column][h.row] = 0;
-          }
-          kifu.push(h);
-        });
+        if (json.history) {
+          rawKifu = json.history;
+        }
       })
       .then(() => { resolve(); })
-      .catch(() => { resolve(); });
+      .catch((err) => { resolve(); });
+  });
+};
+
+const kifuToBanmen = () => {
+  return new Promise((resolve, reject) => {
+    kifu.forEach((v, i) => {
+      switch (v.te) {
+        case "b":
+          banmen[v.column][v.row] = 1;
+          break;
+        case "w":
+          banmen[v.column][v.row] = 2;
+          break;
+        case "rm":
+          banmen[v.column][v.row] = 0;
+          break;
+        default:
+          banmen[v.column][v.row] = 0;
+      }
+    });
+    resolve();
   });
 };
 
@@ -103,9 +115,27 @@ const prepareWebSocket = () => {
           case "rm":
             banmen[msg.action.column][msg.action.row] = 0;
         }
-        kifu.push({ te: msg.action.te, row: msg.action.row, column: msg.action.column });
-        renderBanmen()
+        if (!rawKifu) {
+          rawKifu = [];
+        }
+        rawKifu.push({ te: msg.action.te, row: msg.action.row, column: msg.action.column });
+        normalizeKifu()
+          .then(() => renderBanmen())
           .then(() => renderKifu())
+          .then(() => renderAgehama())
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+      if (msg.type === "rewind") {
+        rawKifu.push({ te: "rw", dest: msg.rewind.dest });
+        normalizeKifu()
+          .then(() => clearBanmen())
+          .then(() => kifuToBanmen())
+          .then(() => renderBanmen())
+          .then(() => clearKifuHTML())
+          .then(() => renderKifu())
+          .then(() => renderAgehama())
           .catch((err) => {
             console.error(err);
           });
@@ -114,7 +144,7 @@ const prepareWebSocket = () => {
     ws.onclose = (ev) => {
       setTimeout(() => {
         init()
-          .then(() => makeBanmen())
+          .then(() => clearBanmen())
           .then(() => getHistory())
           .then(() => makeWebSocket())
           .then(() => renderBanmen())
@@ -167,14 +197,45 @@ const renderKifu = () => {
               break;
             }
           }
-          teElm.textContent += "トル";
+          teElm.textContent += "トラレル";
           break;
       }
+      let backButtonElm = document.createElement("button");
+      backButtonElm.classList.add("kifu-rewind");
+      backButtonElm.onclick = () => { rewind(i) };
+      backButtonElm.textContent = "この手まで巻き戻す";
       kifuElm.appendChild(indexElm);
       kifuElm.appendChild(xElm);
       kifuElm.appendChild(yElm);
       kifuElm.appendChild(teElm);
+      kifuElm.appendChild(backButtonElm);
       kifuHTML.insertBefore(kifuElm, kifuHTML.firstChild);
+    });
+    resolve();
+  });
+};
+
+const rewind = (i) => {
+  ws.send(JSON.stringify({
+    type: "rewind",
+    rewind: {
+      dest: i
+    }
+  }));
+};
+
+const normalizeKifu = () => {
+  return new Promise((resolve, reject) => {
+    if (!rawKifu) {
+      resolve();
+    }
+    kifu = [];
+    rawKifu.forEach((v, i) => {
+      if (v.te === "rw") {
+        kifu = kifu.slice(0, v.dest + 1);
+        return;
+      }
+      kifu.push(v);
     });
     resolve();
   });
@@ -182,8 +243,19 @@ const renderKifu = () => {
 
 const renderAgehama = () => {
   return new Promise((resolve, reject) => {
-    document.querySelector("#agehama-black").value = agehamaBlack;
-    document.querySelector("#agehama-white").value = agehamaWhite;
+    document.querySelector("#agehama-black").textContent = agehamaWhite;
+    document.querySelector("#agehama-white").textContent = agehamaBlack;
+    resolve();
+  });
+};
+
+const clearKifuHTML = () => {
+  return new Promise((resolve, reject) => {
+    agehamaBlack = 0;
+    agehamaWhite = 0;
+    while (kifuHTML.firstChild) {
+      kifuHTML.removeChild(kifuHTML.firstChild);
+    }
     resolve();
   });
 };
@@ -250,8 +322,10 @@ const chakushu = (column, row) => {
 
 window.onload = () => {
   init()
-    .then(() => makeBanmen())
+    .then(() => clearBanmen())
     .then(() => getHistory())
+    .then(() => normalizeKifu())
+    .then(() => kifuToBanmen())
     .then(() => makeWebSocket())
     .then(() => prepareWebSocket())
     .then(() => renderBanmen())

@@ -23,6 +23,7 @@ type Kifu struct {
 	Te     string `json:"te"`
 	Column int    `json:"column"`
 	Row    int    `json:"row"`
+	Dest   int    `json:"dest"`
 }
 
 func init() {
@@ -87,6 +88,16 @@ func PushHistory(gameID kid.ID, kifu Kifu) error {
 	return nil
 }
 
+// PushRewind saves rewind log to history list
+func PushRewind(gameID kid.ID, dest int) error {
+	r := "rw:" + strconv.Itoa(dest) + ":" + strconv.Itoa(dest)
+	_, err := conn.Do(("RPUSH"), "igo."+gameID.ToHex(true)+".kifu", r)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // GetHistory returns history of game
 func GetHistory(gameID kid.ID) ([]Kifu, error) {
 	rawHistory, err := redis.Strings(conn.Do("LRANGE", "igo."+gameID.ToHex(true)+".kifu", 0, -1))
@@ -98,13 +109,20 @@ func GetHistory(gameID kid.ID) ([]Kifu, error) {
 		token := strings.Split(history, ":")
 		var kifu Kifu
 		kifu.Te = token[0]
-		kifu.Column, err = strconv.Atoi(token[1])
-		if err != nil {
-			return nil, err
-		}
-		kifu.Row, err = strconv.Atoi(token[2])
-		if err != nil {
-			return nil, err
+		if token[0] == "rw" {
+			kifu.Dest, err = strconv.Atoi(token[1])
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			kifu.Column, err = strconv.Atoi(token[1])
+			if err != nil {
+				return nil, err
+			}
+			kifu.Row, err = strconv.Atoi(token[2])
+			if err != nil {
+				return nil, err
+			}
 		}
 		gameHistory = append(gameHistory, kifu)
 	}
