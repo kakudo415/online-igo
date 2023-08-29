@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    ports:
+      - "30849:8080" # '碁' = U+7881 = 30849
+    depends_on:
+      - redis
+  redis:
+    image: "redis:alpine"

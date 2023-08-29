@@ -28,7 +28,7 @@ type Kifu struct {
 
 func init() {
 	var err error
-	conn, err = redis.Dial("tcp", "localhost:6379")
+	conn, err = redis.Dial("tcp", "redis:6379") // Use "{service name}:{port}" written in compose.yaml
 	if err != nil {
 		panic(err)
 	}
